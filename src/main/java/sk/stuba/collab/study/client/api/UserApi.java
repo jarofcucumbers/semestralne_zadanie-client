@@ -1,5 +1,7 @@
 package sk.stuba.collab.study.client.api;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 public class UserApi {
@@ -36,6 +38,20 @@ public class UserApi {
             e.printStackTrace();
             return new LoginResponse(false, null, null, "Exception: " + e.getMessage());
         }
+    }
+
+    public boolean register(String name, String email, String password) {
+        String encName  = URLEncoder.encode(name, StandardCharsets.UTF_8);
+        String encEmail = URLEncoder.encode(email, StandardCharsets.UTF_8);
+        String encPass  = URLEncoder.encode(password, StandardCharsets.UTF_8);
+
+        ApiClient.Response resp = api.get("/users/register"
+                + "?name=" + encName
+                + "&email=" + encEmail
+                + "&password=" + encPass);
+
+        // на бекенді /register повертає 200 при успіху
+        return resp.statusCode() == 200;
     }
 
     public record LoginResponse(boolean success,

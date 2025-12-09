@@ -1,6 +1,7 @@
 package sk.stuba.collab.study.client.api;
 
-import java.util.ArrayList;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 
@@ -8,26 +9,46 @@ public class GroupApi {
 
     private final ApiClient api = new ApiClient();
 
-    // Повертаємо вже СПРАВЖНІ групи, а не Membership
+    /**
+     * Отримати всі групи, в яких знаходиться користувач.
+     * Ми беремо список memberships через:
+     *   GET /api/memberships/user/{userId}
+     *
+     * Кожен membership містить groupId → тому ApiClient.getList повертає map-и.
+     */
     public List<Map<String, Object>> getGroupsForUser(Long userId) {
-        // 1. тягнемо membership
-        List<Map<String, Object>> memberships = api.getList("/memberships/user/" + userId);
+        return api.getList("/memberships/user/" + userId);
+    }
 
-        List<Map<String, Object>> result = new ArrayList<>();
+    /**
+     * Створити нову групу.
+     * Викликає бекенд:
+     *   GET /api/groups/create?name=...&description=...&ownerId=...
+     *
+     * Повертає true, якщо бекенд відповів статусом 200.
+     */
+    public boolean createGroup(Long ownerId, String name, String description) {
+        try {
+            String encName = URLEncoder.encode(name, StandardCharsets.UTF_8);
+            String encDesc = URLEncoder.encode(description, StandardCharsets.UTF_8);
 
-        for (Map<String, Object> m : memberships) {
-            Object gidObj = m.get("groupId");
-            if (!(gidObj instanceof Number)) continue;
+            String url = "/groups/create"
+                    + "?name=" + encName
+                    + "&description=" + encDesc
+                    + "&ownerId=" + ownerId;
 
-            long groupId = ((Number) gidObj).longValue();
+            ApiClient.Response resp = api.get(url);
 
-            // 2. для кожного groupId тягнемо /groups/{id}
-            ApiClient.Response groupResp = api.get("/groups/" + groupId);
-            if (groupResp.statusCode() == 200 && groupResp.body() != null) {
-                result.add(groupResp.body());
-            }
+            System.out.println("CreateGroup Request URL = " + url);
+            System.out.println("CreateGroup Response Code = " + resp.statusCode());
+            System.out.println("CreateGroup Body = " + resp.body());
+
+            return resp.statusCode() == 200;
+
+        } catch (Exception e) {
+            System.out.println("Exception in createGroup: " + e.getMessage());
+            e.printStackTrace();
+            return false;
         }
-
-        return result;
     }
 }

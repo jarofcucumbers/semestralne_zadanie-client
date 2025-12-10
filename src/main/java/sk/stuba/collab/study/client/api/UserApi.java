@@ -13,7 +13,6 @@ public class UserApi {
             ApiClient.Response resp =
                     api.get("/users/login?email=" + email + "&password=" + password);
 
-            // якщо бекенд повернув помилку або 401
             if (resp.statusCode() != 200 || resp.body() == null) {
                 String msg = resp.body() != null && resp.body().get("error") != null
                         ? (String) resp.body().get("error")
@@ -50,7 +49,8 @@ public class UserApi {
                 + "&email=" + encEmail
                 + "&password=" + encPass);
 
-        // на бекенді /register повертає 200 при успіху
+
+        //register return 200
         return resp.statusCode() == 200;
     }
 

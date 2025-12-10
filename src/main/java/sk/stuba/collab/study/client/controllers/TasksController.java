@@ -30,7 +30,6 @@ public class TasksController {
 
     private List<Map<String, Object>> currentTasks;
 
-    /** Викликається з GroupsController після завантаження FXML */
     public void init(Long userId, Long groupId, String groupName) {
         this.userId = userId;
         this.groupId = groupId;
@@ -41,7 +40,6 @@ public class TasksController {
         refreshTasks();
     }
 
-    /** Підвантажити задачі для групи */
     @FXML
     public void refreshTasks() {
         try {
@@ -65,7 +63,6 @@ public class TasksController {
         }
     }
 
-    /** Додати нову задачу */
     @FXML
     public void addTask() {
         String title = newTaskTitleField.getText().trim();
@@ -87,7 +84,6 @@ public class TasksController {
         }
     }
 
-    /** Контекстне меню для списку задач (ПРАВА КНОПКА МИШІ) */
     private void attachContextMenu() {
         ContextMenu menu = new ContextMenu();
 
@@ -110,7 +106,6 @@ public class TasksController {
         tasksList.setContextMenu(menu);
     }
 
-    /** Повернення до списку груп */
     private void goBack() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/groups.fxml"));
@@ -129,7 +124,6 @@ public class TasksController {
         }
     }
 
-    /** Закрити задачу (поставити статус CLOSED) */
     private void closeSelectedTask() {
         Integer idx = getRealTaskIndex();
         if (idx == null) return;
@@ -146,7 +140,6 @@ public class TasksController {
         }
     }
 
-    /** Видалити задачу */
     private void deleteSelectedTask() {
         Integer idx = getRealTaskIndex();
         if (idx == null) return;
@@ -171,7 +164,6 @@ public class TasksController {
         }
     }
 
-    /** Редагувати задачу (тільки title/description, простий варіант) */
     private void editSelectedTask() {
         Integer idx = getRealTaskIndex();
         if (idx == null) return;
@@ -191,7 +183,6 @@ public class TasksController {
         }
         String newTitle = res.get().trim();
 
-        // простий варіант: опис не змінюємо, або можна зробити окремий діалог.
         boolean ok = taskApi.updateTask(taskId, newTitle, oldDesc);
         if (ok) {
             statusLabel.setText("Task updated.");
@@ -201,7 +192,6 @@ public class TasksController {
         }
     }
 
-    /** Показати деталі задачі */
     private void showTaskInfo() {
         Integer idx = getRealTaskIndex();
         if (idx == null) return;
@@ -225,7 +215,6 @@ public class TasksController {
         alert.showAndWait();
     }
 
-    /** Повертає індекс обраної задачі в currentTasks, або null якщо обраний псевдо-рядок */
     private Integer getRealTaskIndex() {
         int idx = tasksList.getSelectionModel().getSelectedIndex();
         if (idx < 0) {
@@ -236,11 +225,9 @@ public class TasksController {
             statusLabel.setText("No real task selected.");
             return null;
         }
-        // якщо показували "[No tasks in this group]" – currentTasks порожній
         return idx;
     }
 
-    /** Invite: запитуємо email і шлемо інвайт */
     @FXML
     public void inviteUser() {
         TextInputDialog dialog = new TextInputDialog();
@@ -257,7 +244,6 @@ public class TasksController {
             return;
         }
 
-        // 🔧 ТУТ ЛИШЕ 2 ПАРАМЕТРИ
         boolean ok = invitationApi.sendInvite(groupId, email);
 
         if (ok) {

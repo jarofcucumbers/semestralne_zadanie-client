@@ -15,16 +15,12 @@ public class GroupsController {
 
     @FXML private ListView<String> groupsList;
     @FXML private Label statusLabel;
-
-    // 🔹 ДОДАЛИ ЦІ ДВА ПОЛЯ ДЛЯ FXML
     @FXML private TextField groupNameField;
     @FXML private TextField groupDescField;
 
     private final GroupApi groupApi = new GroupApi();
-
-
     private Long userId;
-    private List<Map<String, Object>> currentGroups; // тут лежать і id, і name
+    private List<Map<String, Object>> currentGroups;
 
     public void setUserId(Long id) {
         this.userId = id;
@@ -38,18 +34,15 @@ public class GroupsController {
             groupsList.getItems().clear();
 
             for (Map<String, Object> g : currentGroups) {
-                // DEBUG: можна глянути, що реально приходить
                 System.out.println("Group map: " + g);
 
                 String name = null;
 
-                // 1) пробуємо "name"
                 Object n1 = g.get("name");
                 if (n1 != null) {
                     name = n1.toString();
                 }
 
-                // 2) якщо нема - пробуємо "groupName"
                 if (name == null) {
                     Object n2 = g.get("groupName");
                     if (n2 != null) {
@@ -57,7 +50,6 @@ public class GroupsController {
                     }
                 }
 
-                // 3) якщо все одно null – fallback
                 if (name == null) {
                     Object idObj = g.get("id");
                     name = "Group #" + (idObj != null ? idObj.toString() : "?");
@@ -88,15 +80,12 @@ public class GroupsController {
 
         Map<String, Object> group = currentGroups.get(idx);
 
-        // 1) спробуємо взяти groupId (якщо це membership)
         Object gidObj = group.get("groupId");
 
-        // 2) якщо ні – можливо, ключ названий group_id
         if (gidObj == null) {
             gidObj = group.get("group_id");
         }
 
-        // 3) якщо все ще null – може це вже Group і там просто id
         if (gidObj == null) {
             gidObj = group.get("id");
         }
@@ -109,7 +98,6 @@ public class GroupsController {
 
         Long groupId = ((Number) gidObj).longValue();
 
-        // назва групи така, як показується у списку
         String groupName = groupsList.getItems().get(idx);
 
         System.out.println("Opening group " + groupId + " : " + groupName);
@@ -131,7 +119,6 @@ public class GroupsController {
         }
     }
 
-
     @FXML
     public void createGroup() {
         String name = groupNameField.getText().trim();
@@ -148,7 +135,7 @@ public class GroupsController {
             statusLabel.setText("Group created.");
             groupNameField.clear();
             groupDescField.clear();
-            loadGroups(); // оновити список
+            loadGroups();
         } else {
             statusLabel.setText("Cannot create group.");
         }

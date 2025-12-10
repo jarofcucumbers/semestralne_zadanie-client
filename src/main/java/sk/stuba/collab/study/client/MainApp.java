@@ -9,7 +9,6 @@ public class MainApp extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        // шукаємо login.fxml в корені resources
         FXMLLoader loader = new FXMLLoader(
                 MainApp.class.getResource("/login.fxml")
         );

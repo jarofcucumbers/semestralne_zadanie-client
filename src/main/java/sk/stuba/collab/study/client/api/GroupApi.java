@@ -9,24 +9,16 @@ public class GroupApi {
 
     private final ApiClient api = new ApiClient();
 
-    /**
-     * Отримати всі групи, в яких знаходиться користувач.
-     * Ми беремо список memberships через:
-     *   GET /api/memberships/user/{userId}
-     *
-     * Кожен membership містить groupId → тому ApiClient.getList повертає map-и.
-     */
+/**  Get all groups that the user belongs to.
+/    We get the list of memberships via:
+/    GET /api/memberships/user/{userId}
+    Each membership contains groupId → therefore ApiClient.getList returns maps. */
+
     public List<Map<String, Object>> getGroupsForUser(Long userId) {
         return api.getList("/memberships/user/" + userId);
     }
 
-    /**
-     * Створити нову групу.
-     * Викликає бекенд:
-     *   GET /api/groups/create?name=...&description=...&ownerId=...
-     *
-     * Повертає true, якщо бекенд відповів статусом 200.
-     */
+
     public boolean createGroup(Long ownerId, String name, String description) {
         try {
             String encName = URLEncoder.encode(name, StandardCharsets.UTF_8);

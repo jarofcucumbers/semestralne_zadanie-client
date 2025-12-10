@@ -44,18 +44,15 @@ public class LoginController {
         }
 
         Long userId = result.userId();
-        String username = result.username(); // якщо захочеш десь показувати
+        String username = result.username();
 
-        // 1) Перевіряємо, чи є запрошення для цього email
         try {
             handleInvitationsForUser(email, userId);
         } catch (Exception e) {
-            // якщо щось впало з інвайтами, логінимось далі, просто покажемо помилку
             e.printStackTrace();
             statusLabel.setText("Login OK, but cannot load invitations.");
         }
 
-        // 2) Переходимо на екран груп
         try {
             openGroupsWindow(userId);
         } catch (IOException e) {
@@ -64,12 +61,7 @@ public class LoginController {
         }
     }
 
-    /**
-     * Обробка pending-запрошень для цього email:
-     * показуємо діалог по кожному інвайту:
-     *  - OK → accept (додає у group)
-     *  - Cancel → decline
-     */
+
     private void handleInvitationsForUser(String email, Long userId) {
         List<Map<String, Object>> invites = invitationApi.getPendingForEmail(email);
 
@@ -97,9 +89,6 @@ public class LoginController {
         }
     }
 
-    /**
-     * Відкриваємо groups.fxml і передаємо userId в GroupsController.
-     */
     private void openGroupsWindow(Long userId) throws IOException {
         Stage stage = (Stage) emailField.getScene().getWindow();
 
@@ -113,9 +102,6 @@ public class LoginController {
         stage.show();
     }
 
-    /**
-     * Обробка кнопки "Register" на екрані логіну.
-     */
     @FXML
     public void goToRegister() {
         try {

@@ -16,7 +16,6 @@ public class ApiClient {
 
     private final String BASE_URL = "http://localhost:8080/api";
 
-    // ---- GET returning list ----
     public List<Map<String, Object>> getList(String path) {
         try {
             HttpRequest request = HttpRequest.newBuilder()
@@ -34,7 +33,6 @@ public class ApiClient {
         }
     }
 
-    // ---- GET returning object + status ----
     public Response get(String path) {
         try {
             HttpRequest request = HttpRequest.newBuilder()
@@ -57,6 +55,5 @@ public class ApiClient {
         }
     }
 
-    // ---- Response type ----
     public record Response(int statusCode, Map<String, Object> body) { }
 }

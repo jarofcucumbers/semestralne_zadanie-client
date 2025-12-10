@@ -31,7 +31,6 @@ public class TaskApi {
         return resp.statusCode() == 200;
     }
 
-    // 🔹 Закрити задачу (status = CLOSED)
     public boolean closeTask(Long taskId) {
         ApiClient.Response resp = api.get("/tasks/" + taskId + "/close");
         return resp.statusCode() == 200;
@@ -44,7 +43,6 @@ public class TaskApi {
         String encTitle = URLEncoder.encode(title, StandardCharsets.UTF_8);
         String encDesc  = URLEncoder.encode(description, StandardCharsets.UTF_8);
 
-        // pidlashchuj pid svij bekend, jakshcho URL inshyj
         String path = "/tasks/" + taskId
                 + "/update?title=" + encTitle
                 + "&description=" + encDesc;
@@ -53,8 +51,6 @@ public class TaskApi {
         return resp.statusCode() == 200;
     }
 
-
-    // 🔹 Видалити задачу
     public boolean deleteTask(Long taskId) {
         ApiClient.Response resp = api.get("/tasks/" + taskId + "/delete");
         return resp.statusCode() == 200;

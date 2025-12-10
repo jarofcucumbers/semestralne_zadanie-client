@@ -34,7 +34,6 @@ public class RegisterController {
         boolean ok = userApi.register(name, email, pass);
         if (ok) {
             statusLabel.setText("Account created. You can login now.");
-            // можна одразу перекинути на login:
             goToLogin();
         } else {
             statusLabel.setText("Cannot register (email already used?).");

@@ -9,21 +9,17 @@
       spacing="15" alignment="TOP_CENTER"
       prefWidth="500" prefHeight="500">
 
-    <!-- Заголовок -->
     <Label text="Your Groups"
            style="-fx-font-size: 22px; -fx-font-weight: bold;"/>
 
-    <!-- Список існуючих груп -->
     <ListView fx:id="groupsList"
               prefHeight="250"
               maxWidth="350"/>
 
-    <!-- Кнопка відкриття групи -->
     <Button text="Open selected group"
             onAction="#openSelectedGroup"
             maxWidth="200"/>
 
-    <!-- Блок створення нової групи -->
     <Separator prefWidth="400"/>
 
     <Label text="Create new group"
@@ -43,7 +39,6 @@
                 maxWidth="150"/>
     </VBox>
 
-    <!-- Статус (повідомлення про помилки/успіх) -->
     <Label fx:id="statusLabel"
            textFill="red"
            style="-fx-font-size: 14px;"/>
